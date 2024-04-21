@@ -5,8 +5,8 @@
 import numpy as np
 
 
-def random_predict(number: int = 1) -> int:
-    """Рандомно угадываем число
+def binary_search(number: int = 1) -> int:
+    """Угадываем число по алгоритму бинарного поиска
 
     Args:
         number (int, optional): Загаданное число. Defaults to 1.
@@ -14,17 +14,25 @@ def random_predict(number: int = 1) -> int:
     Returns:
         int: Число попыток
     """
+    
     count = 0
-
-    while True:
+    low = 0
+    high = 1000
+    
+    while low <= high:
         count += 1
-        predict_number = np.random.randint(1, 101)  # предполагаемое число
-        if number == predict_number:
-            break  # выход из цикла если угадали
+        mid = (low+high) / 2
+        if mid == number:
+            break # Выход из цикла, если угадали
+        if mid > number:
+            high = mid-1 
+        else:
+            low = mid+1
+            
     return count
 
 
-def score_game(random_predict) -> int:
+def score_game(binary_search) -> int:
     """За какое количство попыток в среднем за 1000 подходов угадывает наш алгоритм
 
     Args:
@@ -38,7 +46,7 @@ def score_game(random_predict) -> int:
     random_array = np.random.randint(1, 101, size=(1000))  # загадали список чисел
 
     for number in random_array:
-        count_ls.append(random_predict(number))
+        count_ls.append(binary_search(number))
 
     score = int(np.mean(count_ls))
     print(f"Ваш алгоритм угадывает число в среднем за:{score} попыток")
@@ -47,4 +55,4 @@ def score_game(random_predict) -> int:
 
 if __name__ == "__main__":
     # RUN
-    score_game(random_predict)
+    score_game(binary_search)
